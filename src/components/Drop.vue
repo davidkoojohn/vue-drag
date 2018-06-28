@@ -9,11 +9,7 @@
                  @start="isDragging=true"
                  @end="isDragging=false">
         <transition-group type="transition" :name="'flip-list'">
-          <li class="list-group-item"
-              v-for="element in list"
-              :key="element.order">
-            <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-               @click="element.fixed=! element.fixed" aria-hidden="true"></i>
+          <li class="list-group-item" v-for="element in list" :key="element.order">
             {{element.name}}
           </li>
         </transition-group>
@@ -26,18 +22,12 @@
                  :options="dragOptions"
                  :move="onMove">
         <transition-group name="no" class="list-group" tag="ul">
-          <li class="list-group-item"
-              v-for="element in list2"
-              :key="element.order">
-            <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-               @click=" element.fixed=! element.fixed"
-               aria-hidden="true"></i>
+          <li class="list-group-item" v-for="element in list2" :key="element.order">
             {{element.name}}
           </li>
         </transition-group>
       </draggable>
     </div>
-
 
     <div  class="list-group item">
       <pre>{{listString}}</pre>
@@ -79,8 +69,7 @@
       }
     },
     methods:{
-      onMove ({relatedContext, draggedContext}) {
-        console.log(relatedContext, draggedContext)
+      onMove({relatedContext, draggedContext}) {
         const relatedElement = relatedContext.element;
         const draggedElement = draggedContext.element;
         return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
@@ -95,6 +84,18 @@
           ghostClass: 'ghost'
         };
       },
+
+      /*list: {
+        get() {
+          return this.message.map((name, index) => {
+            return {name, order: index+1, fixed: false};
+          })
+        },
+        set(newValue) {
+          // console.log(newValue)
+        }
+      },*/
+
       listString(){
         return JSON.stringify(this.list, null, 2);
       },
@@ -103,20 +104,25 @@
       }
     },
     watch: {
-      isDragging (newValue) {
-        console.log(newValue)
+      isDragging(newValue) {
         if (newValue){
           this.delayedDragging= true
           return
         }
-        this.$nextTick( () =>{
+        this.$nextTick(() =>{
           this.delayedDragging =false
         })
+      },
+      list2(newValue, oldValue) {
+        console.log(newValue, oldValue)
+      },
+      list(newValue, oldValue) {
+        console.log(newValue, oldValue)
       }
     },
 
     mounted(e) {
-      console.log(this.list)
+      // console.log(this.list)
     }
   }
 </script>
